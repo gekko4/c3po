@@ -1,0 +1,29 @@
+# Rust
+/target/
+Cargo.lock
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Logs and runtime data
+logs/*
+!logs/.gitkeep
+data/ticks/*
+data/ptbs/*
+data/books/*
+data/evaluations/*
+data/opportunities/*
+data/replay/*
+!data/.gitkeep
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.*b
