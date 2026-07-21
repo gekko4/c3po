@@ -1,0 +1,79 @@
+[assets]
+enabled = ["BTC", "ETH", "SOL", "XRP"]
+
+[timeframes]
+enabled = ["5m", "15m", "1h", "4h", "1d"]
+
+[[pairs.allowed]]
+short = "5m"
+long = "15m"
+
+[[pairs.allowed]]
+short = "5m"
+long = "1h"
+
+[[pairs.allowed]]
+short = "15m"
+long = "1h"
+
+[[pairs.allowed]]
+short = "5m"
+long = "4h"
+
+[[pairs.allowed]]
+short = "15m"
+long = "4h"
+
+[[pairs.allowed]]
+short = "1h"
+long = "4h"
+
+[[pairs.allowed]]
+short = "5m"
+long = "1d"
+
+[[pairs.allowed]]
+short = "15m"
+long = "1d"
+
+[[pairs.allowed]]
+short = "1h"
+long = "1d"
+
+[[pairs.allowed]]
+short = "4h"
+long = "1d"
+
+[eval]
+trigger_buffer = "0.005"
+execution_buffer = "0.010"
+min_seconds_to_end = 30
+max_book_age_ms = 1500
+min_top_book_size = "1"
+min_depth_confirmed_size = "5"
+min_gross_edge = "0.10"
+eval_interval_ms = 500
+discovery_interval_ms = 10000
+
+[rtds]
+websocket_url = "wss://example.invalid/rtds"
+topic = "crypto_prices_chainlink"
+reconnect_backoff_ms = 1000
+
+[clob]
+websocket_url = "wss://example.invalid/clob"
+max_subscription_tokens = 500
+reconnect_backoff_ms = 1000
+
+[storage]
+data_dir = "data"
+ticks_dir = "data/ticks"
+ptbs_dir = "data/ptbs"
+books_dir = "data/books"
+evaluations_dir = "data/evaluations"
+opportunities_dir = "data/opportunities"
+replay_dir = "data/replay"
+
+[telemetry]
+enabled = true
+health_interval_ms = 10000

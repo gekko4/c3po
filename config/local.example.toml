@@ -1,0 +1,12 @@
+# Copy this to config/local.toml for local overrides.
+# Do not commit real secrets.
+
+[eval]
+trigger_buffer = "0.005"
+execution_buffer = "0.010"
+eval_interval_ms = 1000
+discovery_interval_ms = 15000
+
+[telemetry]
+enabled = true
+health_interval_ms = 15000
