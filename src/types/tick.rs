@@ -13,16 +13,16 @@ impl RtdsSymbol {
         Self(value.into())
     }
 
+    pub fn normalized(value: impl AsRef<str>) -> Self {
+        Self(value.as_ref().trim().to_ascii_lowercase())
+    }
+
     pub fn as_str(&self) -> &str {
         &self.0
     }
 
     pub fn into_inner(self) -> String {
         self.0
-    }
-
-    pub fn normalized(value: impl AsRef<str>) -> Self {
-        Self(value.as_ref().trim().to_ascii_lowercase())
     }
 
     pub fn is_empty(&self) -> bool {
@@ -93,11 +93,50 @@ impl Tick {
         }
     }
 
+    pub fn from_rtds(
+        symbol: impl AsRef<str>,
+        timestamp_ms: i64,
+        raw_value: impl Into<String>,
+        full_accuracy_value: Option<String>,
+        normalized_value: Decimal,
+        received_at_ms: i64,
+    ) -> Self {
+        Self::new(
+            RtdsSymbol::normalized(symbol),
+            timestamp_ms,
+            raw_value,
+            full_accuracy_value,
+            normalized_value,
+            received_at_ms,
+            "rtds",
+        )
+    }
+
     pub fn exact_key(&self) -> (&RtdsSymbol, i64) {
         (&self.symbol, self.timestamp_ms)
     }
 
     pub fn is_exact_open_tick(&self, open_ms: i64) -> bool {
         self.timestamp_ms == open_ms
+    }
+
+    pub fn age_ms(&self, now_ms: i64) -> i64 {
+        now_ms.saturating_sub(self.received_at_ms)
+    }
+
+    pub fn is_fresh(&self, now_ms: i64, max_age_ms: i64) -> bool {
+        self.age_ms(now_ms) <= max_age_ms
+    }
+
+    pub fn has_positive_value(&self) -> bool {
+        self.normalized_value > Decimal::ZERO
+    }
+
+    pub fn same_symbol(&self, symbol: &RtdsSymbol) -> bool {
+        self.symbol == *symbol
+    }
+
+    pub fn matches_symbol_and_timestamp(&self, symbol: &RtdsSymbol, timestamp_ms: i64) -> bool {
+        self.same_symbol(symbol) && self.timestamp_ms == timestamp_ms
     }
 }

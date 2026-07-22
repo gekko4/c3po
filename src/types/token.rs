@@ -2,6 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 use std::fmt;
+use std::ops::Deref;
 
 /// Polymarket outcome token ID wrapper.
 ///
@@ -26,11 +27,29 @@ impl TokenId {
     pub fn is_empty(&self) -> bool {
         self.0.trim().is_empty()
     }
+
+    pub fn is_non_empty(&self) -> bool {
+        !self.is_empty()
+    }
 }
 
 impl fmt::Display for TokenId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(&self.0)
+    }
+}
+
+impl Deref for TokenId {
+    type Target = str;
+
+    fn deref(&self) -> &Self::Target {
+        self.as_str()
+    }
+}
+
+impl AsRef<str> for TokenId {
+    fn as_ref(&self) -> &str {
+        self.as_str()
     }
 }
 
@@ -66,11 +85,29 @@ impl ConditionId {
     pub fn is_empty(&self) -> bool {
         self.0.trim().is_empty()
     }
+
+    pub fn is_non_empty(&self) -> bool {
+        !self.is_empty()
+    }
 }
 
 impl fmt::Display for ConditionId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(&self.0)
+    }
+}
+
+impl Deref for ConditionId {
+    type Target = str;
+
+    fn deref(&self) -> &Self::Target {
+        self.as_str()
+    }
+}
+
+impl AsRef<str> for ConditionId {
+    fn as_ref(&self) -> &str {
+        self.as_str()
     }
 }
 

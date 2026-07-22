@@ -28,6 +28,18 @@ impl PtbStatus {
     pub fn is_usable(self) -> bool {
         matches!(self, PtbStatus::CapturedExact)
     }
+
+    pub fn is_pending(self) -> bool {
+        matches!(self, PtbStatus::PendingPtb)
+    }
+
+    pub fn is_missing(self) -> bool {
+        matches!(self, PtbStatus::MissingPtb)
+    }
+
+    pub fn is_invalid(self) -> bool {
+        matches!(self, PtbStatus::InvalidPtb)
+    }
 }
 
 impl fmt::Display for PtbStatus {
@@ -52,6 +64,10 @@ impl PtbSource {
             PtbSource::Replay => "replay",
             PtbSource::ManualFixture => "manual_fixture",
         }
+    }
+
+    pub fn requires_exact_open_tick(self) -> bool {
+        matches!(self, PtbSource::RtdsExactOpenTick)
     }
 }
 
@@ -121,6 +137,35 @@ impl PriceToBeat {
         plausibility_status: Option<String>,
         captured_at_ms: i64,
     ) -> Self {
+        Self::captured_from_source(
+            market_slug,
+            asset,
+            timeframe,
+            open_ms,
+            normalized_value,
+            raw_value,
+            full_accuracy_value,
+            source_tick_timestamp_ms,
+            PtbSource::RtdsExactOpenTick,
+            plausibility_status,
+            captured_at_ms,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub fn captured_from_source(
+        market_slug: MarketSlug,
+        asset: Asset,
+        timeframe: Timeframe,
+        open_ms: i64,
+        normalized_value: Decimal,
+        raw_value: impl Into<String>,
+        full_accuracy_value: Option<String>,
+        source_tick_timestamp_ms: i64,
+        source: PtbSource,
+        plausibility_status: Option<String>,
+        captured_at_ms: i64,
+    ) -> Self {
         Self {
             market_slug,
             asset,
@@ -130,7 +175,7 @@ impl PriceToBeat {
             raw_value: Some(raw_value.into()),
             full_accuracy_value,
             source_tick_timestamp_ms: Some(source_tick_timestamp_ms),
-            source: Some(PtbSource::RtdsExactOpenTick),
+            source: Some(source),
             status: PtbStatus::CapturedExact,
             plausibility_status,
             captured_at_ms: Some(captured_at_ms),
@@ -189,7 +234,30 @@ impl PriceToBeat {
         self.status.is_usable() && self.normalized_value.is_some()
     }
 
+    pub fn is_pending(&self) -> bool {
+        self.status.is_pending()
+    }
+
+    pub fn is_missing(&self) -> bool {
+        self.status.is_missing()
+    }
+
+    pub fn is_invalid(&self) -> bool {
+        self.status.is_invalid()
+    }
+
     pub fn value(&self) -> Option<Decimal> {
         self.normalized_value
+    }
+
+    pub fn has_exact_open_timestamp(&self) -> bool {
+        self.source_tick_timestamp_ms == Some(self.open_ms)
+    }
+
+    pub fn is_exact_rtds_open_tick(&self) -> bool {
+        self.status == PtbStatus::CapturedExact
+            && self.source == Some(PtbSource::RtdsExactOpenTick)
+            && self.has_exact_open_timestamp()
+            && self.normalized_value.is_some()
     }
 }

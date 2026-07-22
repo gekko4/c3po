@@ -92,4 +92,24 @@ impl Signal {
     pub fn is_depth_confirmed(&self) -> bool {
         self.classification == EvaluationClassification::DepthConfirmedUnderOne
     }
+
+    pub fn tokens(&self) -> [&TokenId; 2] {
+        [&self.selected_short_token, &self.selected_long_token]
+    }
+
+    pub fn edge_per_share(&self) -> Decimal {
+        Decimal::ONE - self.depth_avg_cost
+    }
+
+    pub fn top_edge_per_share(&self) -> Decimal {
+        Decimal::ONE - self.top_cost
+    }
+
+    pub fn recompute_pair_type(&mut self) {
+        self.pair_type = format!("{}-{}", self.short_tf, self.long_tf);
+    }
+
+    pub fn is_expired_or_settled(&self) -> bool {
+        self.seconds_to_end <= 0
+    }
 }

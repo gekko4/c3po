@@ -47,6 +47,19 @@ impl EvaluationClassification {
     pub fn is_depth_confirmed(self) -> bool {
         matches!(self, EvaluationClassification::DepthConfirmedUnderOne)
     }
+
+    pub fn is_terminal_failure(self) -> bool {
+        matches!(
+            self,
+            EvaluationClassification::MissingShortPtb
+                | EvaluationClassification::MissingLongPtb
+                | EvaluationClassification::EqualPtbNoPackage
+                | EvaluationClassification::NoUsableAsks
+                | EvaluationClassification::StaleBook
+                | EvaluationClassification::ExpiredOrTooClose
+                | EvaluationClassification::ExpectedAboveOne
+        )
+    }
 }
 
 /// One persisted evaluator row.
@@ -85,6 +98,51 @@ pub struct EvaluationRow {
 }
 
 impl EvaluationRow {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        ts_ms: i64,
+        asset: Asset,
+        short_tf: Timeframe,
+        long_tf: Timeframe,
+        short_slug: MarketSlug,
+        long_slug: MarketSlug,
+        short_ptb: Option<Decimal>,
+        long_ptb: Option<Decimal>,
+        package_name: Option<PackageName>,
+        selected_short_token: Option<TokenId>,
+        selected_long_token: Option<TokenId>,
+        short_ask: Option<Decimal>,
+        long_ask: Option<Decimal>,
+        short_ask_size: Option<Decimal>,
+        long_ask_size: Option<Decimal>,
+        top_cost: Option<Decimal>,
+        edge: Option<Decimal>,
+        seconds_to_end: i64,
+        classification: EvaluationClassification,
+    ) -> Self {
+        Self {
+            ts_ms,
+            asset,
+            short_tf,
+            long_tf,
+            short_slug,
+            long_slug,
+            short_ptb,
+            long_ptb,
+            package_name,
+            selected_short_token,
+            selected_long_token,
+            short_ask,
+            long_ask,
+            short_ask_size,
+            long_ask_size,
+            top_cost,
+            edge,
+            seconds_to_end,
+            classification,
+        }
+    }
+
     pub fn pair_type(&self) -> String {
         format!("{}-{}", self.short_tf, self.long_tf)
     }
@@ -95,5 +153,9 @@ impl EvaluationRow {
 
     pub fn is_depth_confirmed(&self) -> bool {
         self.classification.is_depth_confirmed()
+    }
+
+    pub fn is_terminal_failure(&self) -> bool {
+        self.classification.is_terminal_failure()
     }
 }

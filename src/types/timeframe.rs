@@ -8,12 +8,20 @@ use std::str::FromStr;
 #[derive(
     Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize,
 )]
-#[serde(rename_all = "snake_case")]
 pub enum Timeframe {
+    #[serde(rename = "5m")]
     FiveMin,
+
+    #[serde(rename = "15m")]
     FifteenMin,
+
+    #[serde(rename = "1h")]
     OneHour,
+
+    #[serde(rename = "4h")]
     FourHour,
+
+    #[serde(rename = "1d")]
     OneDay,
 }
 
@@ -107,9 +115,13 @@ impl FromStr for Timeframe {
             | "fifteenmins"
             | "fifteenminute"
             | "fifteenminutes" => Ok(Timeframe::FifteenMin),
+
             "1h" | "1hr" | "1hour" | "onehour" => Ok(Timeframe::OneHour),
+
             "4h" | "4hr" | "4hour" | "fourhour" => Ok(Timeframe::FourHour),
+
             "1d" | "1day" | "oneday" | "daily" => Ok(Timeframe::OneDay),
+
             _ => Err(ParseTimeframeError {
                 value: input.to_string(),
             }),
