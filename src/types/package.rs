@@ -30,48 +30,42 @@ impl fmt::Display for PackageName {
     }
 }
 
-/// Role *f a selected token in the package.*#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+/// Role of a selected token in the deterministic package.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum LegRole {
-    Short*arket,
+    ShortMarket,
     LongMarket,
 }
 
-/// One *elected buy leg of a deterministic*package.
+/// One selected buy leg of a deterministic package.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PackageToken {
-    pu* role: LegRole,
-    pub token_id: *okenId,
-    pub market_slug: Marke*Slug,
-    pub timeframe: Timeframe*
+    pub role: LegRole,
+    pub token_id: TokenId,
+    pub market_slug: MarketSlug,
+    pub timeframe: Timeframe,
 }
 
 impl PackageToken {
-    pub fn*new(
+    pub fn new(
         role: LegRole,
-      * token_id: TokenId,
-        market*slug: MarketSlug,
-        timefram*: Timeframe,
+        token_id: TokenId,
+        market_slug: MarketSlug,
+        timeframe: Timeframe,
     ) -> Self {
-     *  Self {
+        Self {
             role,
-       *    token_id,
-            market_s*ug,
+            token_id,
+            market_slug,
             timeframe,
-       *}
-    }
-
-    pub fn is_short_marke*_leg(&self) -> bool {
-        self*role == LegRole::ShortMarket
-    }*
-    pub fn is_long_market_leg(&se*f) -> bool {
-        self.role == *egRole::LongMarket
+        }
     }
 }
 
-/// Ca*didate emitted by relation_engine *efore book pricing.
+/// Candidate emitted by relation_engine before book pricing.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct PackageCan*idate {
+pub struct PackageCandidate {
     pub asset: Asset,
 
     pub short_market_slug: MarketSlug,
@@ -126,44 +120,16 @@ impl PackageCandidate {
         }
     }
 
+    pub fn selected_tokens(&self) -> [&TokenId; 2] {
+        [&self.selected_short_token, &self.selected_long_token]
+    }
+
     pub fn pair_type(&self) -> String {
         format!("{}-{}", self.short_tf, self.long_tf)
     }
 
-    pub fn tokens(&self) -> [&TokenId; 2] {
-        [&self.selected_short_token, &self.selected_long_token]
-    }
-
-    pub fn selected_short_package_token(&self) -> PackageToken {
-        PackageToken::new(
-            LegRole::ShortMarket,
-            self.selected_short_token.clone(),
-            self.short_market_slug.clone(),
-            self.short_tf,
-        )
-    }
-
-    pub fn selected_long_package_token(&self) -> PackageToken {
-        PackageToken::new(
-            LegRole::LongMarket,
-            self.selected_long_token.clone(),
-            self.long_market_slug.clone(),
-            self.long_tf,
-        )
-    }
-
-    pub fn package_tokens(&self) -> [PackageToken; 2] {
-        [
-            self.selected_short_package_token(),
-            self.selected_long_package_token(),
-        ]
-    }
-
-    pub fn recompute_seconds_to_end(&mut self, now_ms: i64) {
-        self.seconds_to_end = self.end_ms.saturating_sub(now_ms) / 1_000;
-    }
-
-    pub fn is_expired_or_settled(&self, now_ms: i64) -> bool {
-        now_ms >= self.end_ms
+    pub fn has_time_remaining(&self) -> bool {
+        self.seconds_to_end > 0
     }
 }
+`
