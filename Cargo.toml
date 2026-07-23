@@ -5,14 +5,11 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1"
-tokio = { version = "1", features = ["full"] }
-tracing-subscriber = "0.3"
-
-[dependencies]
-anyhow = "1"
 config = "0.14"
 rust_decimal = { version = "1", features = ["serde"] }
 serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+tracing-subscriber = "0.3"
 
 [dev-dependencies]
 rust_decimal_macros = "1"

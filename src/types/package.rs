@@ -132,4 +132,3 @@ impl PackageCandidate {
         self.seconds_to_end > 0
     }
 }
-`

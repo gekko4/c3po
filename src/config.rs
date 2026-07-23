@@ -55,21 +55,21 @@ pub struct EvaluationConfig {
     pub discovery_interval_ms: u64,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct RtdsConfig {
     pub websocket_url: String,
     pub topic: String,
     pub reconnect_backoff_ms: u64,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct ClobConfig {
     pub websocket_url: String,
     pub max_subscription_tokens: usize,
     pub reconnect_backoff_ms: u64,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct StorageConfig {
     pub data_dir: String,
     pub ticks_dir: String,
@@ -80,7 +80,7 @@ pub struct StorageConfig {
     pub replay_dir: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct TelemetryConfig {
     pub enabled: bool,
     pub health_interval_ms: u64,
