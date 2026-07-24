@@ -47,10 +47,7 @@ pub fn load_ticks_jsonl(path: impl AsRef<Path>) -> Result<Vec<Tick>> {
     Ok(ticks)
 }
 
-pub fn replay_ticks_into_store(
-    path: impl AsRef<Path>,
-    store: &mut TickStore,
-) -> Result<usize> {
+pub fn replay_ticks_into_store(path: impl AsRef<Path>, store: &mut TickStore) -> Result<usize> {
     let ticks = load_ticks_jsonl(path)?;
 
     let mut inserted = 0usize;
@@ -63,10 +60,7 @@ pub fn replay_ticks_into_store(
     Ok(inserted)
 }
 
-pub fn write_ticks_jsonl<'a, I>(
-    path: impl AsRef<Path>,
-    ticks: I,
-) -> Result<usize>
+pub fn write_ticks_jsonl<'a, I>(path: impl AsRef<Path>, ticks: I) -> Result<usize>
 where
     I: IntoIterator<Item = &'a Tick>,
 {
@@ -82,8 +76,7 @@ where
     let mut written = 0usize;
 
     for tick in ticks {
-        let json = serde_json::to_string(tick)
-            .context("failed to serialize tick as JSON")?;
+        let json = serde_json::to_string(tick).context("failed to serialize tick as JSON")?;
 
         writeln!(file, "{json}")
             .with_context(|| format!("failed to write tick to file: {}", path.display()))?;

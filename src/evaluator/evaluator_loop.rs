@@ -58,13 +58,7 @@ pub fn evaluate_package_top_book(
 
     let classification = classify_top_book(&quote);
 
-    row_with_quote(
-        candidate,
-        now_ms,
-        seconds_to_end,
-        quote,
-        classification,
-    )
+    row_with_quote(candidate, now_ms, seconds_to_end, quote, classification)
 }
 
 pub fn evaluate_package_without_books(

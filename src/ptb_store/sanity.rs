@@ -35,17 +35,11 @@ pub fn check_ptb_plausibility(asset: Asset, value: Decimal) -> PtbSanityResult {
     let (min, max) = plausible_range(asset);
 
     if value < min {
-        return PtbSanityResult::failed(format!(
-            "below_plausible_range:{}<{}",
-            value, min
-        ));
+        return PtbSanityResult::failed(format!("below_plausible_range:{}<{}", value, min));
     }
 
     if value > max {
-        return PtbSanityResult::failed(format!(
-            "above_plausible_range:{}>{}",
-            value, max
-        ));
+        return PtbSanityResult::failed(format!("above_plausible_range:{}>{}", value, max));
     }
 
     PtbSanityResult::ok()
@@ -53,21 +47,9 @@ pub fn check_ptb_plausibility(asset: Asset, value: Decimal) -> PtbSanityResult {
 
 fn plausible_range(asset: Asset) -> (Decimal, Decimal) {
     match asset {
-        Asset::BTC => (
-            Decimal::from(1_000),
-            Decimal::from(1_000_000),
-        ),
-        Asset::ETH => (
-            Decimal::from(100),
-            Decimal::from(100_000),
-        ),
-        Asset::SOL => (
-            Decimal::from(1),
-            Decimal::from(10_000),
-        ),
-        Asset::XRP => (
-            Decimal::new(1, 2),
-            Decimal::from(100),
-        ),
+        Asset::BTC => (Decimal::from(1_000), Decimal::from(1_000_000)),
+        Asset::ETH => (Decimal::from(100), Decimal::from(100_000)),
+        Asset::SOL => (Decimal::from(1), Decimal::from(10_000)),
+        Asset::XRP => (Decimal::new(1, 2), Decimal::from(100)),
     }
 }

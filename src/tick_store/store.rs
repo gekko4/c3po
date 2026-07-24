@@ -26,37 +26,21 @@ impl TickStore {
         self.by_exact_key.insert(key, tick)
     }
 
-    pub fn get_tick(
-        &self,
-        symbol: &RtdsSymbol,
-        timestamp_ms: i64,
-    ) -> Option<&Tick> {
+    pub fn get_tick(&self, symbol: &RtdsSymbol, timestamp_ms: i64) -> Option<&Tick> {
         self.by_exact_key.get(&(symbol.clone(), timestamp_ms))
     }
 
-    pub fn get_tick_for_asset_open(
-        &self,
-        symbol: impl AsRef<str>,
-        open_ms: i64,
-    ) -> Option<&Tick> {
+    pub fn get_tick_for_asset_open(&self, symbol: impl AsRef<str>, open_ms: i64) -> Option<&Tick> {
         let symbol = RtdsSymbol::normalized(symbol);
         self.get_tick(&symbol, open_ms)
     }
 
-    pub fn has_tick(
-        &self,
-        symbol: &RtdsSymbol,
-        timestamp_ms: i64,
-    ) -> bool {
+    pub fn has_tick(&self, symbol: &RtdsSymbol, timestamp_ms: i64) -> bool {
         self.by_exact_key
             .contains_key(&(symbol.clone(), timestamp_ms))
     }
 
-    pub fn remove_tick(
-        &mut self,
-        symbol: &RtdsSymbol,
-        timestamp_ms: i64,
-    ) -> Option<Tick> {
+    pub fn remove_tick(&mut self, symbol: &RtdsSymbol, timestamp_ms: i64) -> Option<Tick> {
         self.by_exact_key.remove(&(symbol.clone(), timestamp_ms))
     }
 
@@ -82,13 +66,9 @@ impl TickStore {
         start_ms: i64,
         end_ms: i64,
     ) -> impl Iterator<Item = &'a Tick> {
-        self.by_exact_key
-            .values()
-            .filter(move |tick| {
-                tick.same_symbol(symbol)
-                    && tick.timestamp_ms >= start_ms
-                    && tick.timestamp_ms <= end_ms
-            })
+        self.by_exact_key.values().filter(move |tick| {
+            tick.same_symbol(symbol) && tick.timestamp_ms >= start_ms && tick.timestamp_ms <= end_ms
+        })
     }
 
     pub fn all(&self) -> impl Iterator<Item = &Tick> {

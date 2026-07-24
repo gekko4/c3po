@@ -152,7 +152,10 @@ impl Config {
             execution_buffer: parse_decimal(&raw.eval.execution_buffer, "eval.execution_buffer")?,
             min_seconds_to_end: raw.eval.min_seconds_to_end,
             max_book_age_ms: raw.eval.max_book_age_ms,
-            min_top_book_size: parse_decimal(&raw.eval.min_top_book_size, "eval.min_top_book_size")?,
+            min_top_book_size: parse_decimal(
+                &raw.eval.min_top_book_size,
+                "eval.min_top_book_size",
+            )?,
             min_depth_confirmed_size: parse_decimal(
                 &raw.eval.min_depth_confirmed_size,
                 "eval.min_depth_confirmed_size",

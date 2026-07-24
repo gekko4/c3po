@@ -60,7 +60,11 @@ pub fn calculate_depth_for_size(
     DepthResult::new(
         status,
         requested_size,
-        if passes_cost { requested_size } else { Decimal::ZERO },
+        if passes_cost {
+            requested_size
+        } else {
+            Decimal::ZERO
+        },
         Some(short_avg),
         Some(long_avg),
         Some(avg_package_cost),

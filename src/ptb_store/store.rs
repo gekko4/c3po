@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 use crate::types::market::Market;
 use crate::types::ptb::{PriceToBeat, PtbStatus};
-use crate::types::{MarketSlug};
+use crate::types::MarketSlug;
 
 #[derive(Debug, Clone, Default)]
 pub struct PtbStore {
@@ -49,10 +49,7 @@ impl PtbStore {
         self.by_market_slug.get(market_slug)
     }
 
-    pub fn get_mut_ptb_for_market(
-        &mut self,
-        market_slug: &MarketSlug,
-    ) -> Option<&mut PriceToBeat> {
+    pub fn get_mut_ptb_for_market(&mut self, market_slug: &MarketSlug) -> Option<&mut PriceToBeat> {
         self.by_market_slug.get_mut(market_slug)
     }
 
@@ -70,10 +67,7 @@ impl PtbStore {
             .unwrap_or(false)
     }
 
-    pub fn value_for_market(
-        &self,
-        market_slug: &MarketSlug,
-    ) -> Option<rust_decimal::Decimal> {
+    pub fn value_for_market(&self, market_slug: &MarketSlug) -> Option<rust_decimal::Decimal> {
         self.get_ptb_for_market(market_slug)
             .and_then(|ptb| ptb.value())
     }
@@ -101,20 +95,14 @@ impl PtbStore {
     }
 
     pub fn pending(&self) -> impl Iterator<Item = &PriceToBeat> {
-        self.by_market_slug
-            .values()
-            .filter(|ptb| ptb.is_pending())
+        self.by_market_slug.values().filter(|ptb| ptb.is_pending())
     }
 
     pub fn missing(&self) -> impl Iterator<Item = &PriceToBeat> {
-        self.by_market_slug
-            .values()
-            .filter(|ptb| ptb.is_missing())
+        self.by_market_slug.values().filter(|ptb| ptb.is_missing())
     }
 
     pub fn invalid(&self) -> impl Iterator<Item = &PriceToBeat> {
-        self.by_market_slug
-            .values()
-            .filter(|ptb| ptb.is_invalid())
+        self.by_market_slug.values().filter(|ptb| ptb.is_invalid())
     }
 }

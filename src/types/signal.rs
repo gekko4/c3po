@@ -1,8 +1,6 @@
 // src/types/signal.rs
 
-use crate::types::{
-    Asset, EvaluationClassification, MarketSlug, PackageName, Timeframe, TokenId,
-};
+use crate::types::{Asset, EvaluationClassification, MarketSlug, PackageName, Timeframe, TokenId};
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 

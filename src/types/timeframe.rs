@@ -5,9 +5,7 @@ use std::fmt;
 use std::str::FromStr;
 
 /// Supported Up/Down market timeframes.
-#[derive(
-    Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize,
-)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum Timeframe {
     #[serde(rename = "5m")]
     FiveMin,
@@ -108,12 +106,7 @@ impl FromStr for Timeframe {
             "5m" | "5min" | "5mins" | "fivemin" | "fivemins" | "fiveminute" | "fiveminutes" => {
                 Ok(Timeframe::FiveMin)
             }
-            "15m"
-            | "15min"
-            | "15mins"
-            | "fifteenmin"
-            | "fifteenmins"
-            | "fifteenminute"
+            "15m" | "15min" | "15mins" | "fifteenmin" | "fifteenmins" | "fifteenminute"
             | "fifteenminutes" => Ok(Timeframe::FifteenMin),
 
             "1h" | "1hr" | "1hour" | "onehour" => Ok(Timeframe::OneHour),

@@ -5,9 +5,7 @@ use std::fmt;
 use std::str::FromStr;
 
 /// Supported Polymarket crypto Up/Down assets.
-#[derive(
-    Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize,
-)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(rename_all = "UPPERCASE")]
 pub enum Asset {
     BTC,
